@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0dea;
+  transition: all ease 250ms;
+}
+.register-page{
+  align-items: flex-start; 
+}
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+.form-box {
+  background: rgba(85, 82, 82, 0.359);
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+.form-box h2 {
+  margin-bottom: 30px;
+  color: #fdfcfc;
+}
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #fefdfd;
+}
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 0.1px;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #1e1d1d;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #0d8ddb;
+}
+.signup-link {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #f9f9f9;
+}
+.signup-link a {
+  color: #aaa4a4;
+  font-weight: 600;
+}
+
+
+
+
+@media screen and (min-width: 700px){
+
+  .form-container {
+    max-width: 800px;  
+    width: 90%;
+  }
+   form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  form button,
+  .signup-link {
+    grid-column: span 2;
+  }
+
+}
