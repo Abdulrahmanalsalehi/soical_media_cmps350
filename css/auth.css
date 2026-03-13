@@ -62,26 +62,36 @@ button {
 button:hover {
   background-color: #0d8ddb;
 }
-.signup-link {
+.sign-up-message,
+.sign-in-message {
   margin-top: 15px;
   font-size: 14px;
   color: #f9f9f9;
 }
-.signup-link a {
-  color: #aaa4a4;
-  font-weight: 600;
+#sign-up,
+#sign-in{
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+  margin-left: 0.2rem;
+  color: #fef9f9a0;
+  font-weight: 400;
+}
+#sign-up:hover,
+#sign-in:hover {
+  transform: scale(1.1);  
+  transition: 0.2s ease;
 }
 
 
-
-
+/* Only expand features for register page */
 @media screen and (min-width: 700px){
 
-  .form-container {
+  body.register-page .form-container {
     max-width: 800px;  
     width: 90%;
   }
-   form {
+   body.register-page form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;

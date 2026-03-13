@@ -1,29 +1,43 @@
-
+// for localStorage
 function getUsers(){
     return JSON.parse(localStorage.getItem("users")) || []; 
 }
-
-// save users in localStorage 
 function saveUsers(users){
     localStorage.setItem("users", JSON.stringify(users));
-
 }
 
+
+// validate input for email and password
 function isEmailValid(email){
     const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
     return pattern.test(email);
-
 }
-
 function isPasswordStrong(password){
     const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     return pattern.test(password);
 }
 
+// make this the default pic for every user
 const default_pic = "media/profile-picture.png";
 
+//  rediret 
+const sign_up = document.getElementById("sign-up");
+const sign_in = document.getElementById("sign-in");
 
-// **** Validate inputs in register ****
+if (sign_up) {
+  sign_up.addEventListener("click", () => {
+    window.location.href = "register.html";
+  });
+}
+if (sign_in) {
+  sign_in.addEventListener("click", () => {
+    window.location.href = "login.html";
+  });
+}
+
+
+
+
 
 // target register form in html doucment
 const register_form = document.querySelector(".register-page form") 
@@ -34,12 +48,12 @@ if(register_form){
         e.preventDefault();
         
         // collecting values from user registraion 
-        const fullname = document.getElementById("fullname").value;
-        const username =  document.getElementById("username").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-        const password = document.getElementById("password").value;
-        const confirmedpassword = document.getElementById("confirm-password").value;
+        const fullname = document.getElementById("fullname").value.trim();
+        const username =  document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmedpassword = document.getElementById("confirm-password").value.trim();
        
         // show aproperiate messages
         if(!isEmailValid(email)){
@@ -86,8 +100,7 @@ if(register_form){
     }); 
 }
 
-// **** Validate inputs in login ****
-
+//  Validate inputs in login 
 const login_form = document.querySelector(".login-page form") 
 if(login_form){
     login_form.addEventListener("submit", function(e) {
@@ -98,7 +111,8 @@ if(login_form){
         const users = getUsers();
 
         const validate_user = users.find(user => user.email === email && user.password === password);
-        if(!validate_user){
+        // must match with localStorage
+        if(!validate_user){ 
             alert("Invalid email or password");
             return;
         }
