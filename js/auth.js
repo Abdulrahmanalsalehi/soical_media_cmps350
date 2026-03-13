@@ -37,8 +37,6 @@ if (sign_in) {
 
 
 
-
-
 // target register form in html doucment
 const register_form = document.querySelector(".register-page form") 
 if(register_form){
