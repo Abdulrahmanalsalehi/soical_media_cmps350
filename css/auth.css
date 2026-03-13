@@ -48,6 +48,11 @@ body {
   outline: none;
   transition: 0.3s;
 }
+.radio-button{
+  display:flex;
+  gap: 15px; 
+  color:white;
+}
 button {
   width: 100%;
   padding: 12px;
