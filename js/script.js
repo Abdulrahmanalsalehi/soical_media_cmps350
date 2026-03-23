@@ -117,3 +117,153 @@ if (profilePicHeader)
 
     window.location.href = "profile.html";
   });
+
+
+/*********************** create post  ***********************/
+const post_button = document.getElementById("post-button");
+
+if (post_button) {
+  post_button.addEventListener("click", () => {
+    // collect post content from user input
+    const input = document.getElementById("post-input");
+    const content = input.value.trim();
+    if (!content) 
+      return;
+
+    const loggedUser = getLoggedIntUser();
+    const userIndex = users.findIndex(u => u.username === loggedUser.username);
+    // create a new post then push it to user posts list 
+    const newPost = {
+      id: Date.now(),
+      content,
+      timestamp: new Date().toLocaleString(),
+      likes: [],
+      comments: []
+    };
+    users[userIndex].posts.push(newPost);
+
+    saveUsers(users);
+    setLoggedIntUser(users[userIndex]);
+
+    input.value = ""; // clear 
+
+    loadHeaderProfile();
+    showFeeds();
+  });
+}
+
+/*********************** display main feed  ***********************/
+function showFeeds() {
+
+  users = loadUsers();
+
+  const feed = document.getElementById("feed");
+  if (!feed) return;
+
+  feed.innerHTML = "";
+  // create empty list for posts then push user posts to it 
+  let allPosts = [];
+  const loggedUser = getLoggedIntUser();
+
+  users.forEach(user => {
+
+    // If following filter is active
+    if (feedMode === "following") {
+      if (!loggedUser.following || !loggedUser.following.includes(user.username)) {
+        return; // skip users not followed
+      }
+    }
+
+    if (user.posts) {
+      user.posts.forEach(post => {
+        allPosts.push({
+          ...post,
+          username: user.username,
+          profilePic: user.profilePic
+        });
+      });
+    }
+  });
+
+  // sort according to timestamp, most recent apear at the top
+  allPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  // for each post a div will be created including all details of a post
+  allPosts.forEach(post => {
+    const post_element = document.createElement("div");
+    post_element.classList.add("post");
+
+    post_element.innerHTML = `
+      <div class="post-header">
+        <img src="${post.profilePic}" class="default-pic-post">
+        <div>
+          <div class="post-username">${post.username}</div>
+          <div class="timestamp">${post.timestamp}</div>
+        </div>
+
+        ${getLoggedIntUser().username === post.username 
+            ? `<img src="media/trash-2 (2).svg" class="delete-post">`
+            : ""
+          }
+
+      </div>
+
+      <div class="post-content">${post.content}</div>
+
+      <div class="post-actions">
+        <button class="like">
+          <img src="media/heart.svg">
+          <span class="like-count">${post.likes ? post.likes.length : 0}</span>
+        </button>
+
+        <button class="comment">
+          <img src="media/message-circle.svg">
+          <span class="comment-count">${post.comments ? post.comments.length : 0}</span>
+        </button>
+      </div>
+    `;
+
+    feed.appendChild(post_element);
+    // show the post in more details if user clicked on it
+    post_element.addEventListener("click", () => openPost(post));
+
+    const username = post_element.querySelector(".post-username");
+    const pic = post_element.querySelector(".default-pic-post");
+    const likeBtn = post_element.querySelector(".like");
+    const commentBtn = post_element.querySelector(".comment");
+    const likeCount = post_element.querySelector(".like-count");
+    const delete_post = post_element.querySelector(".delete-post");
+    
+    // redirect to the selected user profile
+    username.addEventListener("click", (e) => {
+      e.stopPropagation();
+      localStorage.setItem("viewUser", post.username);
+      window.location.href = "profile.html";
+    });
+    pic.addEventListener("click", (e) => {
+      e.stopPropagation();
+      localStorage.setItem("viewUser", post.username);
+      window.location.href = "profile.html";
+    });
+    // updated like counter 
+    likeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleLike(post, likeCount);
+    });
+    commentBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openPost(post, true); // <-- second argument true shows comments
+    });
+
+    // call delete post if user clicked on trash icon 
+    if(delete_post){
+      delete_post.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deletePost(post);
+
+      });
+    }
+
+  });
+}
+
