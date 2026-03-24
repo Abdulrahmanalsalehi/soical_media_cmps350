@@ -341,3 +341,127 @@ function toggleLike(post, likeCount) {
   showFeeds();
   showUserPosts();
 }
+
+/*********************** show post in details  ***********************/
+function openPost(post, showComments = false) {
+  // a new window will apear when a user click on a post
+  const post_window = document.getElementById("post-window");
+  if (!post_window) return;
+
+  document.getElementById("comments-list").innerHTML = ""; // clear 
+  document.getElementById("comments-section").style.display = "none";
+
+  document.getElementById("detail-profile-pic").src = post.profilePic;
+  document.getElementById("detail-username").textContent = post.username;
+  document.getElementById("detail-timestamp").textContent = post.timestamp;
+  document.getElementById("detail-content").textContent = post.content;
+  document.getElementById("comment-count").textContent = post.comments ? post.comments.length : 0;
+
+  post_window.style.display = "flex";
+
+  document.getElementById("arrow-back").onclick = () => {
+    post_window.style.display = "none";
+  };
+  // show likes and comments 
+  document.getElementById("detail-like").onclick = () => {
+    const likeCount = document.getElementById("like-count");
+    toggleLike(post, likeCount);
+  };
+  document.getElementById("like-count").textContent = post.likes ? post.likes.length : 0;
+  
+  // display comment section if user clicks on comment
+  document.getElementById("detail-comment").onclick = (e) => {
+    e.stopPropagation();
+    const section = document.getElementById("comments-section");
+     
+      if (section.style.display === "block") {
+        section.style.display = "none";
+      } else {
+        section.style.display = "block";
+        renderComments(post);
+       }
+  };
+
+  // call addComment function if user inserted a coment 
+  document.getElementById("comment-button").onclick = () => {
+    addComment(post);
+  };
+   if (showComments) {
+    const section = document.getElementById("comments-section");
+    section.style.display = "block";
+    renderComments(post);
+  }
+
+}
+
+
+/*********************** display comments  ***********************/
+function renderComments(post) {
+
+  const list = document.getElementById("comments-list");
+  list.innerHTML = "";
+
+  if (!post.comments || post.comments.length === 0) return;
+
+  post.comments.forEach(comment => {
+
+    const box = document.createElement("div");
+    box.classList.add("comment-box");
+
+    box.innerHTML = `
+      <div class="comment-header">
+        <img src="${comment.profilePic}" class="default-pic-post">
+        <div>
+          <div class="post-username">${comment.username}</div>
+          <div class="timestamp">${comment.timestamp}</div>
+        </div>
+      </div>
+
+      <div class="comment-content">${comment.content}</div>
+    `;
+
+    list.appendChild(box);
+
+  });
+
+}
+
+/*********************** add comment to a post  ***********************/
+
+function addComment(post) {
+
+  const input = document.getElementById("comment-input");
+  const content = input.value.trim();
+  if (!content) return;
+
+  const loggedUser = getLoggedIntUser();
+
+  const ownerIndex = users.findIndex(u => u.username === post.username);
+  const postIndex = users[ownerIndex].posts.findIndex(p => p.id === post.id);
+
+  const newComment = {
+    content,
+    timestamp: new Date().toLocaleString(),
+    username: loggedUser.username,
+    profilePic: loggedUser.profilePic
+  };
+
+  if(!users[ownerIndex].posts[postIndex].comments){
+   users[ownerIndex].posts[postIndex].comments = [];
+  }
+
+  users[ownerIndex].posts[postIndex].comments.push(newComment);
+
+  const updatedPost = users[ownerIndex].posts[postIndex];
+
+  saveUsers(users);
+
+  input.value = "";
+
+  renderComments(updatedPost);
+
+  document.getElementById("comment-count").textContent = updatedPost.comments.length;
+
+  showFeeds();
+  showUserPosts();
+}
