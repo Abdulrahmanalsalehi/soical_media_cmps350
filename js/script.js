@@ -267,3 +267,77 @@ function showFeeds() {
   });
 }
 
+/*********************** delete post  ***********************/
+
+function deletePost(post){
+  users = loadUsers();
+  const loggedUser = getLoggedIntUser();
+
+  if(loggedUser.username !== post.username){
+    return;
+  }
+  // get the user who the post belongs to 
+  const userIndex = users.findIndex(u => u.username === post.username);
+  if(userIndex === -1) return;
+  // filter out from the posts list if id matches
+  users[userIndex].posts = users[userIndex].posts.filter(
+    p => p.id !== post.id
+  );
+
+  saveUsers(users); 
+  setLoggedIntUser(users[userIndex]);
+
+  const feed = document.getElementById("feed");
+  if (feed) {
+    feed.innerHTML = ""; // clear
+    showFeeds();         // update
+  }
+
+  const myPosts = document.getElementById("my-posts");
+  if (myPosts) {
+    myPosts.innerHTML = ""; // clear
+    showUserPosts();        // update
+  }
+
+  // update the UI accordingly 
+  loadHeaderProfile();
+  loadProfile();
+  showFeeds();
+  showUserPosts();
+}
+
+
+
+/*********************** like funtionality  ***********************/
+function toggleLike(post, likeCount) {
+  users = loadUsers();
+  const loggedUser = getLoggedIntUser();
+  // find who ownes the post and the index of post itself
+  const ownerIndex = users.findIndex(u => u.username === post.username);
+  const postIndex = users[ownerIndex].posts.findIndex(p => p.id === post.id);
+  // use the indexes to retrieve it from storagee
+  const realPost = users[ownerIndex].posts[postIndex];
+  
+
+  if (!realPost.likes) 
+    realPost.likes = [];
+  const likeIndex = realPost.likes.indexOf(loggedUser.username);
+  // if no likes apear 
+  if (likeIndex === -1)
+    realPost.likes.push(loggedUser.username);
+  else // or remove the user if clicked 
+    realPost.likes.splice(likeIndex, 1);
+  
+  // update post object to reflect changes
+  post.likes = realPost.likes;
+
+  saveUsers(users);
+  const updatedLoggedUser = users.find(u => u.username === loggedUser.username);
+  setLoggedIntUser(updatedLoggedUser);
+  // when clicked show the new number of likes 
+  if (likeCount)
+    likeCount.textContent = realPost.likes.length;
+  // UI update
+  showFeeds();
+  showUserPosts();
+}

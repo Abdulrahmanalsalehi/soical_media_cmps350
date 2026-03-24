@@ -15,6 +15,14 @@ body {
 .register-page{
   align-items: flex-start; 
 }
+.login-page{
+  display: flex;
+  flex-direction: column;
+}
+h2{
+color: #fdfcfc;
+}
+
 .form-container {
   width: 100%;
   max-width: 400px;
