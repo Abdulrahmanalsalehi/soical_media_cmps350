@@ -1,10 +1,8 @@
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: Arial, sans-serif;
   background: #0d0d0dea;
@@ -51,8 +49,6 @@ body {
   margin-left: 1rem;
   cursor: pointer;
 }
-
-
 .profile {
   background-color: #373636;
   padding: 20px;
@@ -188,6 +184,7 @@ body {
   justify-content: center;
   padding-left: 2rem;
   padding-right: 2rem;
+  padding-bottom: 3rem;
 }
 .post {
   background-color: #373636;
@@ -219,6 +216,12 @@ body {
   font-size: 0.8em;
   color: #bbbbbb;
 }
+.delete-post{
+  filter: invert(1);
+  cursor: pointer;
+  margin-left: auto;
+  margin-bottom: 1rem;
+}
 .post-content {
   font-size: 1em;
   color: #ffffff;
@@ -241,7 +244,8 @@ body {
 .post-username:hover,
 .default-pic-post:hover,
 #username-header:hover,
-#profile-pic:hover {
+#profile-pic:hover,
+.delete-post:hover {
   transform: scale(1.1);  
   transition: 0.2s ease;
 }
@@ -347,23 +351,6 @@ body {
 #comment-button:hover {
   background-color: #0d8ddb;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

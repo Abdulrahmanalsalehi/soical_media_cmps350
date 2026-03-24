@@ -13,6 +13,7 @@ function setLoggedIntUser(user) {
 }
 let users = loadUsers();
 
+
 /*********************** home page header ***********************/
 function loadHeaderProfile() {
 
@@ -118,39 +119,6 @@ if (profilePicHeader)
     window.location.href = "profile.html";
   });
 
-
-/*********************** create post  ***********************/
-const post_button = document.getElementById("post-button");
-
-if (post_button) {
-  post_button.addEventListener("click", () => {
-    // collect post content from user input
-    const input = document.getElementById("post-input");
-    const content = input.value.trim();
-    if (!content) 
-      return;
-
-    const loggedUser = getLoggedIntUser();
-    const userIndex = users.findIndex(u => u.username === loggedUser.username);
-    // create a new post then push it to user posts list 
-    const newPost = {
-      id: Date.now(),
-      content,
-      timestamp: new Date().toLocaleString(),
-      likes: [],
-      comments: []
-    };
-    users[userIndex].posts.push(newPost);
-
-    saveUsers(users);
-    setLoggedIntUser(users[userIndex]);
-
-    input.value = ""; // clear 
-
-    loadHeaderProfile();
-    showFeeds();
-  });
-}
 
 /*********************** display main feed  ***********************/
 function showFeeds() {
@@ -267,6 +235,7 @@ function showFeeds() {
   });
 }
 
+
 /*********************** delete post  ***********************/
 
 function deletePost(post){
@@ -308,6 +277,42 @@ function deletePost(post){
 
 
 
+
+
+/*********************** create post  ***********************/
+const post_button = document.getElementById("post-button");
+
+if (post_button) {
+  post_button.addEventListener("click", () => {
+    // collect post content from user input
+    const input = document.getElementById("post-input");
+    const content = input.value.trim();
+    if (!content) 
+      return;
+
+    const loggedUser = getLoggedIntUser();
+    const userIndex = users.findIndex(u => u.username === loggedUser.username);
+    // create a new post then push it to user posts list 
+    const newPost = {
+      id: Date.now(),
+      content,
+      timestamp: new Date().toLocaleString(),
+      likes: [],
+      comments: []
+    };
+    users[userIndex].posts.push(newPost);
+
+    saveUsers(users);
+    setLoggedIntUser(users[userIndex]);
+
+    input.value = ""; // clear 
+
+    loadHeaderProfile();
+    showFeeds();
+  });
+}
+
+
 /*********************** like funtionality  ***********************/
 function toggleLike(post, likeCount) {
   users = loadUsers();
@@ -340,7 +345,9 @@ function toggleLike(post, likeCount) {
   // UI update
   showFeeds();
   showUserPosts();
+
 }
+
 
 /*********************** show post in details  ***********************/
 function openPost(post, showComments = false) {
@@ -465,6 +472,7 @@ function addComment(post) {
   showFeeds();
   showUserPosts();
 }
+
 
 /*********************** load profile page  ***********************/
 function loadProfile() {
@@ -749,8 +757,6 @@ function updateFollowButton() {
   btn.onclick = followUser;
 
 }
-
-
 
 
 
