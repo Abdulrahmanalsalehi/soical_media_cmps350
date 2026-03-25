@@ -1,59 +1,52 @@
-// for localStorage
 function getUsers(){
-    return JSON.parse(localStorage.getItem("users")) || []; 
+    return JSON.parse(localStorage.getItem("users")) || [];
 }
 function saveUsers(users){
     localStorage.setItem("users", JSON.stringify(users));
 }
 
 
-// validate input for email and password
 function isEmailValid(email){
-    const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
     return pattern.test(email);
 }
 function isPasswordStrong(password){
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     return pattern.test(password);
 }
 
-// make this the default pic for every user
-const default_pic = "media/profile-picture.png";
+var default_pic = "media/profile-picture.png";
 
-//  rediret 
-const sign_up = document.getElementById("sign-up");
-const sign_in = document.getElementById("sign-in");
+var sign_up = document.getElementById("sign-up");
+var sign_in = document.getElementById("sign-in");
 
 if (sign_up) {
-  sign_up.addEventListener("click", () => {
+  sign_up.addEventListener("click", function() {
     window.location.href = "register.html";
   });
 }
 if (sign_in) {
-  sign_in.addEventListener("click", () => {
+  sign_in.addEventListener("click", function() {
     window.location.href = "login.html";
   });
 }
 
 
 
-// target register form in html doucment
-const register_form = document.querySelector(".register-page form") 
+var register_form = document.querySelector(".register-page form")
 if(register_form){
 
     register_form.addEventListener("submit", function(e) {
-        
+
         e.preventDefault();
-        
-        // collecting values from user registraion 
-        const fullname = document.getElementById("fullname").value.trim();
-        const username =  document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const confirmedpassword = document.getElementById("confirm-password").value.trim();
-       
-        // show aproperiate messages
+
+        var fullname = document.getElementById("fullname").value.trim();
+        var username =  document.getElementById("username").value.trim();
+        var email = document.getElementById("email").value.trim();
+        var phone = document.getElementById("phone").value.trim();
+        var password = document.getElementById("password").value.trim();
+        var confirmedpassword = document.getElementById("confirm-password").value.trim();
+
         if(!isEmailValid(email)){
             alert("Invalid email format");
             return;
@@ -66,24 +59,22 @@ if(register_form){
             alert("Passwords do not match");
             return;
         }
-        
-        let users = getUsers();
-        
-        // compare with emails on localStorage
-        const emailExists = users.some(user => user.email === email);
+
+        var users = getUsers();
+
+        var emailExists = users.some(function(user) { return user.email == email; });
         if(emailExists){
           alert("Email already registered");
           return;
         }
 
-        //create an object once validation is passed 
-        const user = {
+        var user = {
             id: Date.now(),
-            fullname,
-            username,
-            email,
-            phone,
-            password,
+            fullname: fullname,
+            username: username,
+            email: email,
+            phone: phone,
+            password: password,
             profilePic: default_pic,
             bio: "",
             posts: [],
@@ -95,22 +86,20 @@ if(register_form){
 
         window.location.href = "login.html";
 
-    }); 
+    });
 }
 
-//  Validate inputs in login 
-const login_form = document.querySelector(".login-page form") 
+var login_form = document.querySelector(".login-page form")
 if(login_form){
     login_form.addEventListener("submit", function(e) {
         e.preventDefault();
 
-        const email = document.getElementById("email").value.trim()
-        const password = document.getElementById("password").value.trim()
-        const users = getUsers();
+        var email = document.getElementById("email").value.trim()
+        var password = document.getElementById("password").value.trim()
+        var users = getUsers();
 
-        const validate_user = users.find(user => user.email === email && user.password === password);
-        // must match with localStorage
-        if(!validate_user){ 
+        var validate_user = users.find(function(user) { return user.email == email && user.password == password; });
+        if(!validate_user){
             alert("Invalid email or password");
             return;
         }
