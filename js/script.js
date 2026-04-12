@@ -1,4 +1,3 @@
-/*********************** functions to deal with browser storage ***********************/
 function loadUsers() {
   return JSON.parse(localStorage.getItem("users")) || [];
 }
@@ -11,28 +10,27 @@ function getLoggedIntUser() {
 function setLoggedIntUser(user) {
   localStorage.setItem("LoggedInUser", JSON.stringify(user));
 }
-let users = loadUsers();
+var users = loadUsers();
 
 
-/*********************** home page header ***********************/
 function loadHeaderProfile() {
 
   users = loadUsers();
 
-  const user = getLoggedIntUser(); 
+  var user = getLoggedIntUser();
   if (!user)
     return;
-  // show current user stats who is logged in
-  const posts = document.getElementById("posts-count");
-  const followers = document.getElementById("followers-count");
-  const following = document.getElementById("following-count");
+
+  var posts = document.getElementById("posts-count");
+  var followers = document.getElementById("followers-count");
+  var following = document.getElementById("following-count");
 
   if (posts)
     posts.textContent = user.posts ? user.posts.length : 0;
 
   if (followers)
     followers.textContent = user.followers ? user.followers.length : 0;
-    
+
   if (following)
     following.textContent = user.following ? user.following.length : 0;
 
@@ -44,44 +42,43 @@ function loadHeaderProfile() {
 }
 
 
-/*********************** Navigation options ***********************/
-const logout_window = document.getElementById("logout-window");
-const logout_header = document.getElementById("logout-header");
-const yes = document.getElementById("Yes");
-const no = document.getElementById("No");
-const nav_profile = document.getElementById("nav-profile");
-const nav_home = document.getElementById("nav-home");
-const all_posts = document.getElementById("all-posts");
-const following_posts = document.getElementById("following-posts");
-// redirect based on what user select
+var logout_window = document.getElementById("logout-window");
+var logout_header = document.getElementById("logout-header");
+var yes = document.getElementById("Yes");
+var no = document.getElementById("No");
+var nav_profile = document.getElementById("nav-profile");
+var nav_home = document.getElementById("nav-home");
+var all_posts = document.getElementById("all-posts");
+var following_posts = document.getElementById("following-posts");
+
 if (logout_header)
-  logout_header.addEventListener("click", () => {
+  logout_header.addEventListener("click", function() {
     logout_window.style.display = "flex";
   });
 
 if (yes)
-  yes.addEventListener("click", () => {
+  yes.addEventListener("click", function() {
     localStorage.removeItem("LoggedInUser");
     window.location.href = "login.html";
   });
 
 if (no)
-  no.addEventListener("click", () => {
+  no.addEventListener("click", function() {
     logout_window.style.display = "none";
   });
 
 if(nav_profile){
-  nav_profile.addEventListener("click", () => {
+  nav_profile.addEventListener("click", function() {
     window.location.href = "profile.html";
   });
 }
 if(nav_home){
-   nav_home.addEventListener("click", () => {
+   nav_home.addEventListener("click", function() {
    window.location.href = "home.html";
   });
 }
 if (all_posts) {
-  all_posts.addEventListener("click", () => {
+  all_posts.addEventListener("click", function() {
     feedMode = "all";
     all_posts.classList.add("active");
     following_posts.classList.remove("active");
@@ -89,7 +86,7 @@ if (all_posts) {
   });
 }
 if (following_posts) {
-  following_posts .addEventListener("click", () => {
+  following_posts.addEventListener("click", function() {
     feedMode = "following";
     following_posts.classList.add("active");
     all_posts.classList.remove("active");
@@ -99,51 +96,47 @@ if (following_posts) {
 
 
 
-/*********************** redirect to user profile  ***********************/
-const usernameHeader = document.getElementById("username-header");
-const profilePicHeader = document.getElementById("profile-pic");
+var usernameHeader = document.getElementById("username-header");
+var profilePicHeader = document.getElementById("profile-pic");
 
-// when username or pic is selected it redirect to the loggedIn user profile 
 if (usernameHeader)
-  usernameHeader.addEventListener("click", () => {
-    const loggedUser = getLoggedIntUser();
+  usernameHeader.addEventListener("click", function() {
+    var loggedUser = getLoggedIntUser();
     localStorage.setItem("viewUser", loggedUser.username);
 
     window.location.href = "profile.html";
   });
 if (profilePicHeader)
-  profilePicHeader.addEventListener("click", () => {
-    const loggedUser = getLoggedIntUser();
+  profilePicHeader.addEventListener("click", function() {
+    var loggedUser = getLoggedIntUser();
     localStorage.setItem("viewUser", loggedUser.username);
 
     window.location.href = "profile.html";
   });
 
 
-/*********************** display main feed  ***********************/
 function showFeeds() {
 
   users = loadUsers();
 
-  const feed = document.getElementById("feed");
+  var feed = document.getElementById("feed");
   if (!feed) return;
 
   feed.innerHTML = "";
-  // create empty list for posts then push user posts to it 
-  let allPosts = [];
-  const loggedUser = getLoggedIntUser();
 
-  users.forEach(user => {
+  var allPosts = [];
+  var loggedUser = getLoggedIntUser();
 
-    // If following filter is active
+  users.forEach(function(user) {
+
     if (feedMode === "following") {
       if (!loggedUser.following || !loggedUser.following.includes(user.username)) {
-        return; // skip users not followed
+        return;
       }
     }
 
     if (user.posts) {
-      user.posts.forEach(post => {
+      user.posts.forEach(function(post) {
         allPosts.push({
           ...post,
           username: user.username,
@@ -153,12 +146,10 @@ function showFeeds() {
     }
   });
 
-  // sort according to timestamp, most recent apear at the top
-  allPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  
-  // for each post a div will be created including all details of a post
-  allPosts.forEach(post => {
-    const post_element = document.createElement("div");
+  allPosts.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+
+  allPosts.forEach(function(post) {
+    var post_element = document.createElement("div");
     post_element.classList.add("post");
 
     post_element.innerHTML = `
@@ -169,7 +160,7 @@ function showFeeds() {
           <div class="timestamp">${post.timestamp}</div>
         </div>
 
-        ${getLoggedIntUser().username === post.username 
+        ${getLoggedIntUser().username === post.username
             ? `<img src="media/trash-2 (2).svg" class="delete-post">`
             : ""
           }
@@ -192,40 +183,38 @@ function showFeeds() {
     `;
 
     feed.appendChild(post_element);
-    // show the post in more details if user clicked on it
-    post_element.addEventListener("click", () => openPost(post));
 
-    const username = post_element.querySelector(".post-username");
-    const pic = post_element.querySelector(".default-pic-post");
-    const likeBtn = post_element.querySelector(".like");
-    const commentBtn = post_element.querySelector(".comment");
-    const likeCount = post_element.querySelector(".like-count");
-    const delete_post = post_element.querySelector(".delete-post");
-    
-    // redirect to the selected user profile
-    username.addEventListener("click", (e) => {
+    post_element.addEventListener("click", function() { openPost(post); });
+
+    var username = post_element.querySelector(".post-username");
+    var pic = post_element.querySelector(".default-pic-post");
+    var likeBtn = post_element.querySelector(".like");
+    var commentBtn = post_element.querySelector(".comment");
+    var likeCount = post_element.querySelector(".like-count");
+    var delete_post = post_element.querySelector(".delete-post");
+
+    username.addEventListener("click", function(e) {
       e.stopPropagation();
       localStorage.setItem("viewUser", post.username);
       window.location.href = "profile.html";
     });
-    pic.addEventListener("click", (e) => {
+    pic.addEventListener("click", function(e) {
       e.stopPropagation();
       localStorage.setItem("viewUser", post.username);
       window.location.href = "profile.html";
     });
-    // updated like counter 
-    likeBtn.addEventListener("click", (e) => {
+
+    likeBtn.addEventListener("click", function(e) {
       e.stopPropagation();
       toggleLike(post, likeCount);
     });
-    commentBtn.addEventListener("click", (e) => {
+    commentBtn.addEventListener("click", function(e) {
       e.stopPropagation();
-      openPost(post, true); // <-- second argument true shows comments
+      openPost(post, true);
     });
 
-    // call delete post if user clicked on trash icon 
     if(delete_post){
-      delete_post.addEventListener("click", (e) => {
+      delete_post.addEventListener("click", function(e) {
         e.stopPropagation();
         deletePost(post);
 
@@ -236,39 +225,36 @@ function showFeeds() {
 }
 
 
-/*********************** delete post  ***********************/
-
 function deletePost(post){
   users = loadUsers();
-  const loggedUser = getLoggedIntUser();
+  var loggedUser = getLoggedIntUser();
 
   if(loggedUser.username !== post.username){
     return;
   }
-  // get the user who the post belongs to 
-  const userIndex = users.findIndex(u => u.username === post.username);
-  if(userIndex === -1) return;
-  // filter out from the posts list if id matches
-  users[userIndex].posts = users[userIndex].posts.filter(
-    p => p.id !== post.id
-  );
 
-  saveUsers(users); 
+  var userIndex = users.findIndex(function(u) { return u.username == post.username; });
+  if(userIndex === -1) return;
+
+  users[userIndex].posts = users[userIndex].posts.filter(function(p) {
+    return p.id !== post.id;
+  });
+
+  saveUsers(users);
   setLoggedIntUser(users[userIndex]);
 
-  const feed = document.getElementById("feed");
+  var feed = document.getElementById("feed");
   if (feed) {
-    feed.innerHTML = ""; // clear
-    showFeeds();         // update
+    feed.innerHTML = "";
+    showFeeds();
   }
 
-  const myPosts = document.getElementById("my-posts");
+  var myPosts = document.getElementById("my-posts");
   if (myPosts) {
-    myPosts.innerHTML = ""; // clear
-    showUserPosts();        // update
+    myPosts.innerHTML = "";
+    showUserPosts();
   }
 
-  // update the UI accordingly 
   loadHeaderProfile();
   loadProfile();
   showFeeds();
@@ -277,25 +263,22 @@ function deletePost(post){
 
 
 
-
-
-/*********************** create post  ***********************/
-const post_button = document.getElementById("post-button");
+var post_button = document.getElementById("post-button");
 
 if (post_button) {
-  post_button.addEventListener("click", () => {
-    // collect post content from user input
-    const input = document.getElementById("post-input");
-    const content = input.value.trim();
-    if (!content) 
+  post_button.addEventListener("click", function() {
+
+    var input = document.getElementById("post-input");
+    var content = input.value.trim();
+    if (!content)
       return;
 
-    const loggedUser = getLoggedIntUser();
-    const userIndex = users.findIndex(u => u.username === loggedUser.username);
-    // create a new post then push it to user posts list 
-    const newPost = {
+    var loggedUser = getLoggedIntUser();
+    var userIndex = users.findIndex(function(u) { return u.username == loggedUser.username; });
+
+    var newPost = {
       id: Date.now(),
-      content,
+      content: content,
       timestamp: new Date().toLocaleString(),
       likes: [],
       comments: []
@@ -305,7 +288,7 @@ if (post_button) {
     saveUsers(users);
     setLoggedIntUser(users[userIndex]);
 
-    input.value = ""; // clear 
+    input.value = "";
 
     loadHeaderProfile();
     showFeeds();
@@ -313,49 +296,47 @@ if (post_button) {
 }
 
 
-/*********************** like funtionality  ***********************/
 function toggleLike(post, likeCount) {
   users = loadUsers();
-  const loggedUser = getLoggedIntUser();
-  // find who ownes the post and the index of post itself
-  const ownerIndex = users.findIndex(u => u.username === post.username);
-  const postIndex = users[ownerIndex].posts.findIndex(p => p.id === post.id);
-  // use the indexes to retrieve it from storagee
-  const realPost = users[ownerIndex].posts[postIndex];
-  
+  var loggedUser = getLoggedIntUser();
 
-  if (!realPost.likes) 
+  var ownerIndex = users.findIndex(function(u) { return u.username == post.username; });
+  var postIndex = users[ownerIndex].posts.findIndex(function(p) { return p.id == post.id; });
+
+  var realPost = users[ownerIndex].posts[postIndex];
+
+
+  if (!realPost.likes)
     realPost.likes = [];
-  const likeIndex = realPost.likes.indexOf(loggedUser.username);
-  // if no likes apear 
+  var likeIndex = realPost.likes.indexOf(loggedUser.username);
+
   if (likeIndex === -1)
     realPost.likes.push(loggedUser.username);
-  else // or remove the user if clicked 
+  else
     realPost.likes.splice(likeIndex, 1);
-  
-  // update post object to reflect changes
+
   post.likes = realPost.likes;
 
   saveUsers(users);
-  const updatedLoggedUser = users.find(u => u.username === loggedUser.username);
+  var updatedLoggedUser = users.find(function(u) { return u.username == loggedUser.username; });
   setLoggedIntUser(updatedLoggedUser);
-  // when clicked show the new number of likes 
+
   if (likeCount)
     likeCount.textContent = realPost.likes.length;
-  // UI update
+
   showFeeds();
   showUserPosts();
 
 }
 
 
-/*********************** show post in details  ***********************/
-function openPost(post, showComments = false) {
-  // a new window will apear when a user click on a post
-  const post_window = document.getElementById("post-window");
+function openPost(post, showComments) {
+  if(showComments === undefined) showComments = false;
+
+  var post_window = document.getElementById("post-window");
   if (!post_window) return;
 
-  document.getElementById("comments-list").innerHTML = ""; // clear 
+  document.getElementById("comments-list").innerHTML = "";
   document.getElementById("comments-section").style.display = "none";
 
   document.getElementById("detail-profile-pic").src = post.profilePic;
@@ -366,21 +347,20 @@ function openPost(post, showComments = false) {
 
   post_window.style.display = "flex";
 
-  document.getElementById("arrow-back").onclick = () => {
+  document.getElementById("arrow-back").onclick = function() {
     post_window.style.display = "none";
   };
-  // show likes and comments 
-  document.getElementById("detail-like").onclick = () => {
-    const likeCount = document.getElementById("like-count");
+
+  document.getElementById("detail-like").onclick = function() {
+    var likeCount = document.getElementById("like-count");
     toggleLike(post, likeCount);
   };
   document.getElementById("like-count").textContent = post.likes ? post.likes.length : 0;
-  
-  // display comment section if user clicks on comment
-  document.getElementById("detail-comment").onclick = (e) => {
+
+  document.getElementById("detail-comment").onclick = function(e) {
     e.stopPropagation();
-    const section = document.getElementById("comments-section");
-     
+    var section = document.getElementById("comments-section");
+
       if (section.style.display === "block") {
         section.style.display = "none";
       } else {
@@ -389,12 +369,11 @@ function openPost(post, showComments = false) {
        }
   };
 
-  // call addComment function if user inserted a coment 
-  document.getElementById("comment-button").onclick = () => {
+  document.getElementById("comment-button").onclick = function() {
     addComment(post);
   };
    if (showComments) {
-    const section = document.getElementById("comments-section");
+    var section = document.getElementById("comments-section");
     section.style.display = "block";
     renderComments(post);
   }
@@ -402,17 +381,16 @@ function openPost(post, showComments = false) {
 }
 
 
-/*********************** display comments  ***********************/
 function renderComments(post) {
 
-  const list = document.getElementById("comments-list");
+  var list = document.getElementById("comments-list");
   list.innerHTML = "";
 
   if (!post.comments || post.comments.length === 0) return;
 
-  post.comments.forEach(comment => {
+  post.comments.forEach(function(comment) {
 
-    const box = document.createElement("div");
+    var box = document.createElement("div");
     box.classList.add("comment-box");
 
     box.innerHTML = `
@@ -433,21 +411,19 @@ function renderComments(post) {
 
 }
 
-/*********************** add comment to a post  ***********************/
-
 function addComment(post) {
 
-  const input = document.getElementById("comment-input");
-  const content = input.value.trim();
+  var input = document.getElementById("comment-input");
+  var content = input.value.trim();
   if (!content) return;
 
-  const loggedUser = getLoggedIntUser();
+  var loggedUser = getLoggedIntUser();
 
-  const ownerIndex = users.findIndex(u => u.username === post.username);
-  const postIndex = users[ownerIndex].posts.findIndex(p => p.id === post.id);
+  var ownerIndex = users.findIndex(function(u) { return u.username == post.username; });
+  var postIndex = users[ownerIndex].posts.findIndex(function(p) { return p.id == post.id; });
 
-  const newComment = {
-    content,
+  var newComment = {
+    content: content,
     timestamp: new Date().toLocaleString(),
     username: loggedUser.username,
     profilePic: loggedUser.profilePic
@@ -459,7 +435,7 @@ function addComment(post) {
 
   users[ownerIndex].posts[postIndex].comments.push(newComment);
 
-  const updatedPost = users[ownerIndex].posts[postIndex];
+  var updatedPost = users[ownerIndex].posts[postIndex];
 
   saveUsers(users);
 
@@ -474,13 +450,12 @@ function addComment(post) {
 }
 
 
-/*********************** load profile page  ***********************/
 function loadProfile() {
   users = loadUsers();
 
-  const viewUsername = localStorage.getItem("viewUser");
-  const user = users.find(u => u.username === viewUsername) || getLoggedIntUser();
-  if (!user) 
+  var viewUsername = localStorage.getItem("viewUser");
+  var user = users.find(function(u) { return u.username == viewUsername; }) || getLoggedIntUser();
+  if (!user)
     return;
 
   if (document.getElementById("editFullname"))
@@ -503,7 +478,7 @@ function loadProfile() {
 
   if (document.getElementById("bio"))
     document.getElementById("bio").textContent = user.bio || "This is my bio";
-  
+
   document.getElementById("profile-posts").textContent =
   user.posts ? user.posts.length : 0;
 
@@ -516,19 +491,17 @@ function loadProfile() {
 }
 
 
-/*********************** edit profile for loggeduser  ***********************/
 function editProfile(){
   users = loadUsers();
-  
-  const edit_window = document.getElementById("edit-window");
-  const loggedUser = getLoggedIntUser();
-  const viewUsername = localStorage.getItem("viewUser");
-  const user = users.find(u => u.username === viewUsername) || loggedUser;
 
-  const edit_Button = document.getElementById("edit");
-  const follow_button = document.getElementById("follow-button");
+  var edit_window = document.getElementById("edit-window");
+  var loggedUser = getLoggedIntUser();
+  var viewUsername = localStorage.getItem("viewUser");
+  var user = users.find(function(u) { return u.username == viewUsername; }) || loggedUser;
 
-  // Show/hide the edit button depending on whose profile it is
+  var edit_Button = document.getElementById("edit");
+  var follow_button = document.getElementById("follow-button");
+
   if (user.username === loggedUser.username) {
     edit_Button.style.display = "block";
     follow_button.style.display = "none";
@@ -537,22 +510,21 @@ function editProfile(){
     follow_button.style.display = "block";
   }
 
-  // Only allow opening edit window if it's your own profile
-  edit_Button.addEventListener("click", () => {
+  edit_Button.addEventListener("click", function() {
     edit_window.style.display = "flex";
   });
 
-  document.getElementById("cancel").addEventListener("click", () => {
+  document.getElementById("cancel").addEventListener("click", function() {
     edit_window.style.display = "none";
   });
 
 
 
-  document.getElementById("save").addEventListener("click", () => {
+  document.getElementById("save").addEventListener("click", function() {
     users = loadUsers();
-    let loggedInUser = getLoggedIntUser();
+    var loggedInUser = getLoggedIntUser();
 
-    const updatedUser = {
+    var updatedUser = {
       ...loggedInUser,
       fullname: document.getElementById("editFullname").value.trim(),
       username: document.getElementById("editUsername").value.trim(),
@@ -561,10 +533,9 @@ function editProfile(){
       bio: document.getElementById("editBio").value.trim(),
     };
 
-    // Update in users array
-      users = users.map(user =>
-      user.username === loggedInUser.username ? updatedUser : user
-    );
+    users = users.map(function(user) {
+      return user.username === loggedInUser.username ? updatedUser : user;
+    });
 
     saveUsers(users);
     setLoggedIntUser(updatedUser);
@@ -574,56 +545,53 @@ function editProfile(){
     loadProfile();
     loadHeaderProfile();
     showUserPosts();
-    
+
   });
 
 }
 
 
-
-
-
-/*********************** show the loggeduser posts  ***********************/
 function showUserPosts() {
   users = loadUsers();
 
-  const feed = document.getElementById("my-posts");
+  var feed = document.getElementById("my-posts");
   if (!feed) return;
 
   feed.innerHTML = "";
 
-   // Get the user whose profile we are viewing
-  const viewUsername = localStorage.getItem("viewUser");
-  const loggedUser = getLoggedIntUser();
-  const user = users.find(u => u.username === viewUsername) || loggedUser;
+  var viewUsername = localStorage.getItem("viewUser");
+  var loggedUser = getLoggedIntUser();
+  var user = users.find(function(u) { return u.username == viewUsername; }) || loggedUser;
 
   if (!user.posts) return;
 
   if (document.getElementById("my-posts-heading"))
-    document.getElementById("my-posts-heading").textContent = `${user.username}'s posts`;
+    document.getElementById("my-posts-heading").textContent = user.username + "'s posts";
 
-  let userPosts = user.posts.map(post => ({
+  var userPosts = user.posts.map(function(post) {
+    return {
       ...post,
       username: user.username,
       profilePic: user.profilePic
-    }));
-  userPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    };
+  });
+  userPosts.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
 
-  userPosts.forEach(post => {
+  userPosts.forEach(function(post) {
 
-    const post_element = document.createElement("div");
+    var post_element = document.createElement("div");
     post_element.classList.add("post");
 
     post_element.innerHTML = `
       <div class="post-header">
-       
+
         <img src="${post.profilePic}" class="default-pic-post">
         <div>
           <div class="post-username">${post.username}</div>
           <div class="timestamp">${post.timestamp}</div>
         </div>
 
-        ${getLoggedIntUser().username === post.username 
+        ${getLoggedIntUser().username === post.username
             ? `<img src="media/trash-2 (2).svg" class="delete-post">`
             : ""
           }
@@ -647,33 +615,33 @@ function showUserPosts() {
 
     feed.appendChild(post_element);
 
-    post_element.addEventListener("click", () => openPost(post));
+    post_element.addEventListener("click", function() { openPost(post); });
 
-    const like_button = post_element.querySelector(".like");
-    const like_count = post_element.querySelector(".like-count");
-    const post_username = post_element.querySelector(".post-username");
-    const post_pic = post_element.querySelector(".default-pic-post");
-    const delete_post = post_element.querySelector(".delete-post");
+    var like_button = post_element.querySelector(".like");
+    var like_count = post_element.querySelector(".like-count");
+    var post_username = post_element.querySelector(".post-username");
+    var post_pic = post_element.querySelector(".default-pic-post");
+    var delete_post = post_element.querySelector(".delete-post");
 
-     post_username.addEventListener("click", (e) => {
+     post_username.addEventListener("click", function(e) {
       e.stopPropagation();
       localStorage.setItem("viewUser", post.username);
       window.location.href = "profile.html";
     });
 
-    post_pic.addEventListener("click", (e) => {
+    post_pic.addEventListener("click", function(e) {
       e.stopPropagation();
       localStorage.setItem("viewUser", post.username);
       window.location.href = "profile.html";
     });
 
-    
-    like_button.addEventListener("click", (e) => {
+
+    like_button.addEventListener("click", function(e) {
       e.stopPropagation();
       toggleLike(post, like_count);
     });
     if(delete_post){
-      delete_post.addEventListener("click", (e) => {
+      delete_post.addEventListener("click", function(e) {
         e.stopPropagation();
         deletePost(post);
       });
@@ -686,70 +654,62 @@ function showUserPosts() {
 
 
 function followUser() {
-  const loggedUser = getLoggedIntUser();
-  const viewUsername = localStorage.getItem("viewUser");
+  var loggedUser = getLoggedIntUser();
+  var viewUsername = localStorage.getItem("viewUser");
 
   if (!viewUsername || viewUsername === loggedUser.username) return;
 
-  // Load fresh users array
   users = loadUsers();
 
-  // Get references to objects inside the users array
-  const viewedIndex = users.findIndex(u => u.username === viewUsername);
-  const loggedIndex = users.findIndex(u => u.username === loggedUser.username);
+  var viewedIndex = users.findIndex(function(u) { return u.username == viewUsername; });
+  var loggedIndex = users.findIndex(function(u) { return u.username == loggedUser.username; });
 
   if (viewedIndex === -1 || loggedIndex === -1) return;
 
-  const viewedUser = users[viewedIndex];
-  const currentUser = users[loggedIndex];
+  var viewedUser = users[viewedIndex];
+  var currentUser = users[loggedIndex];
 
-  // Ensure arrays exist
   if (!viewedUser.followers) viewedUser.followers = [];
   if (!currentUser.following) currentUser.following = [];
 
-  const isFollowing = viewedUser.followers.includes(loggedUser.username);
+  var isFollowing = viewedUser.followers.includes(loggedUser.username);
 
   if (isFollowing) {
-    // Unfollow
-    viewedUser.followers = viewedUser.followers.filter(u => u !== loggedUser.username);
-    currentUser.following = currentUser.following.filter(u => u !== viewUsername);
+    viewedUser.followers = viewedUser.followers.filter(function(u) { return u !== loggedUser.username; });
+    currentUser.following = currentUser.following.filter(function(u) { return u !== viewUsername; });
   } else {
-    // Follow
     viewedUser.followers.push(loggedUser.username);
     currentUser.following.push(viewUsername);
   }
 
-  // Save updated users array
   saveUsers(users);
 
-  // Update logged-in user in localStorage
   setLoggedIntUser(currentUser);
 
-  // Update UI
-  updateFollowButton(); // changes Follow/Unfollow text
-  loadHeaderProfile();  // updates logged-in user's following count
-  loadProfile();        // updates viewed user's followers count
+  updateFollowButton();
+  loadHeaderProfile();
+  loadProfile();
 }
 
 
 function updateFollowButton() {
 
-  const btn = document.getElementById("follow-button");
+  var btn = document.getElementById("follow-button");
   if (!btn) return;
-  
-  const users = loadUsers();
 
-  const viewUsername = localStorage.getItem("viewUser");
-  const loggedUser = getLoggedIntUser();
+  var users = loadUsers();
+
+  var viewUsername = localStorage.getItem("viewUser");
+  var loggedUser = getLoggedIntUser();
 
   if (!viewUsername || viewUsername === loggedUser.username) {
     btn.style.display = "none";
     return;
   }
 
-  const viewedUser = users.find(u => u.username === viewUsername);
+  var viewedUser = users.find(function(u) { return u.username == viewUsername; });
 
-  const isFollowing = viewedUser.followers &&
+  var isFollowing = viewedUser.followers &&
     viewedUser.followers.includes(loggedUser.username);
 
   btn.textContent = isFollowing ? "Unfollow" : "Follow";
@@ -771,8 +731,6 @@ if (following_posts) {
   following_posts.classList.remove("active");
 }
 
-
-/*********************** load everthing  ***********************/
 
 showFeeds();
 loadProfile();
