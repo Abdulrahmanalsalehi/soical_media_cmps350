@@ -7,7 +7,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/Abdulrahmanalsalehi/soical_media_cmps350/issues"
   },
-  "homepage": "https://github.com/Abdulrahmanalsalehi/soical_media_cmps350#readme"
+  "homepage": "https://github.com/Abdulrahmanalsalehi/soical_media_cmps350#readme",
+  "dependencies": {
+    "@prisma/client": "^7.7.0",
+    "bcryptjs": "^3.0.3",
+    "next": "^16.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "prisma": "^7.7.0"
+  }
 }
