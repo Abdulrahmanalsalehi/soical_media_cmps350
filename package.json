@@ -15,10 +15,11 @@
     "type": "git",
     "url": "git+https://github.com/Abdulrahmanalsalehi/soical_media_cmps350.git"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Abdulrahmanalsalehi/soical_media_cmps350/issues"
   },
@@ -31,6 +32,8 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
+    "dotenv": "^17.4.2",
     "prisma": "^7.7.0"
   }
+ 
 }

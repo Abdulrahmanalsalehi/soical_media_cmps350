@@ -1,60 +1,57 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-    id        int      @id @default(autoincrement())
-    fullname  String  
-    username  String   @unique
-    email     String   @unique
-    phone     String?
-    dob       DateTime?
-    gender    String?
-    password  String
-    bio       String?
-    avatar    String?
-    posts     Post[]
-    likes     Like[]
-    comments  Comment[]
-    following follow[] @relation("Follower")
-    followers follow[] @relation("Following")
+  id        Int      @id @default(autoincrement())
+  fullname  String
+  username  String   @unique
+  email     String   @unique
+  phone     String?
+  dob       DateTime?
+  gender    String?
+  password  String
+  bio       String?
+  avatar    String?
+  createdAt DateTime @default(now())
 
-    @@map("users")
+  posts     Post[]
+  likes     Like[]
+  comments  Comment[]
+  following Follow[] @relation("Follower")
+  followers Follow[] @relation("Following")
+
+  @@map("users")
 }
-
 
 model Post {
-   id         Int       @id @default(autoincrement())
-   content    String 
-   createdAt  DateTime  @default(now())
-   authorID   int
-   author     User      @relation(fields: [authorID], references: [id], onDelete: Cascade)
-   likes      like[]
-   comments   Comment[]
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  authorID  Int
+  author    User     @relation(fields: [authorID], references: [id], onDelete: Cascade)
+  likes     Like[]
+  comments  Comment[]
 
-   @@map("posts")
-
+  @@map("posts")
 }
-
 
 model Like {
-    id         int       @id @default(autoincrement())
-    userID     int 
-    postID     int
-    createdAt  DateTime  @default(now())
-    user       User      @relation(fields: [userID], references: [id], onDelete: Cascade)
-    post       Post      @relation(fields: [postID], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  userID    Int
+  postID    Int
+  createdAt DateTime @default(now())
 
-    @@unique([userID, postID])
-    @@map("likes")
+  user      User     @relation(fields: [userID], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postID], references: [id], onDelete: Cascade)
 
+  @@unique([userID, postID])
+  @@map("likes")
 }
-
 
 model Comment {
   id        Int      @id @default(autoincrement())
@@ -69,15 +66,14 @@ model Comment {
   @@map("comments")
 }
 
-
 model Follow {
-  id           Int      @id @default(autoincrement())
-  followerID   Int
-  followingID  Int
-  createdAt    DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  followerID  Int
+  followingID Int
+  createdAt   DateTime @default(now())
 
-  follower     User     @relation("Follower",  fields: [followerID],  references: [id], onDelete: Cascade)
-  following    User     @relation("Following", fields: [followingID], references: [id], onDelete: Cascade)
+  follower    User     @relation("Follower", fields: [followerID], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingID], references: [id], onDelete: Cascade)
 
   @@unique([followerID, followingID])
   @@map("follows")
