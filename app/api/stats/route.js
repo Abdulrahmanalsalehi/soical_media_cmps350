@@ -24,13 +24,13 @@ export async function GET() {
     ]);
 
   return NextResponse.json({
-    totals,
-    avgFollowers: Number(avgFollowers).toFixed(2),
-    avgPosts: Number(avgPosts).toFixed(2),
-    mostActive,
-    topPosts,
-    topWords,
-    postsPerMonth,
-    leaderboard,
+    totals: totals.data ?? null,
+    avgFollowers: Number(avgFollowers.data ?? 0).toFixed(2),
+    avgPosts: Number(avgPosts.data ?? 0).toFixed(2),
+    mostActive: mostActive.data ?? [],
+    topPosts: topPosts.data ?? [],
+    topWords: topWords.data ?? [],
+    postsPerMonth: postsPerMonth.data ?? [],
+    leaderboard: leaderboard.data ?? [],
   });
 }

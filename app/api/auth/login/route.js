@@ -12,7 +12,7 @@ export async function POST(req) {
     const { data: user, error } = await getUserByEmail(email);
 
     if (error) {
-      return NextResponse.json(error, { status: error.status });
+      return NextResponse.json({ error }, { status: error.status ?? 500 });
     }
     if (!user) {
       return NextResponse.json(

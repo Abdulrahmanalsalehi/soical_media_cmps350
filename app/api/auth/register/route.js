@@ -41,14 +41,14 @@ export async function POST(req) {
       fullname,
       username,
       email,
-      phone,
-      dob: dob ? new Date(dob) : null,
-      gender,
+      ...(phone ? { phone } : {}),
+      ...(dob ? { dob: new Date(dob) } : {}),
+      ...(gender ? { gender } : {}),
       password: hashedPassword,
     });
 
     if (error) {
-      return NextResponse.json(error, { status: error.status });
+      return NextResponse.json({ error }, { status: error.status ?? 500 });
     }
 
     return NextResponse.json(

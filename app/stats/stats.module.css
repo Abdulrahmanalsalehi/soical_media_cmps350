@@ -1,0 +1,186 @@
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 7rem 1.2rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Card ── */
+.card {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #2e2e2e;
+}
+
+.cardTitle {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.cardSub {
+  color: #888;
+  font-size: 0.82rem;
+  margin-bottom: 1.2rem;
+}
+
+/* ── Stat 1: Overview Grid ── */
+.overviewGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.overviewItem {
+  flex: 1 1 100px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.bigNumber {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0d8ddb;
+}
+
+.label {
+  display: block;
+  color: #bbb;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+/* ── Stat 2: Averages ── */
+.averagesRow {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.averageBox {
+  flex: 1 1 140px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+/* ── Tables (stats 3 & 6) ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+.table th {
+  text-align: left;
+  color: #888;
+  font-weight: 600;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid #333;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.table td {
+  padding: 0.6rem 0.6rem;
+  border-bottom: 1px solid #222;
+}
+
+.clickRow {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.clickRow:hover {
+  background: #2a2a2a;
+}
+
+.badge {
+  display: inline-block;
+  background: #373636;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+/* ── Stat 4: Bar Chart ── */
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 140px;
+  padding-top: 20px;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.barWrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.barValue {
+  color: #bbb;
+  font-size: 0.65rem;
+  margin-bottom: 2px;
+}
+
+.bar {
+  width: 100%;
+  background: #0d8ddb;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.barLabel {
+  color: #888;
+  font-size: 0.65rem;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* ── Stat 5: Word Cloud ── */
+.wordCloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  line-height: 1.8;
+}
+
+.word {
+  color: #e0e0e0;
+  background: #2a2a2a;
+  border-radius: 6px;
+  padding: 2px 8px;
+  cursor: default;
+}
+
+/* ── Misc ── */
+.empty {
+  color: #666;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
