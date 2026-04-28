@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "@/css/home.css";
-import styles from "./stats.module.css";
+import styles from "./stats.css";
 
 export default function StatsPage() {
   const router = useRouter();
@@ -41,10 +41,6 @@ export default function StatsPage() {
 
   const maxPostCount = stats.postsPerMonth?.length
     ? Math.max(...stats.postsPerMonth.map((m) => Number(m.post_count)))
-    : 1;
-
-  const maxWordCount = stats.topWords?.length
-    ? Math.max(...stats.topWords.map((w) => w.count))
     : 1;
 
   return (
@@ -104,44 +100,9 @@ export default function StatsPage() {
           </div>
         </section>
 
-        {/* ── STAT 3: Most Active Users (last 3 months) ── */}
+        {/* ── STAT 3: Posts Per Month ── */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>3. Most Active Users</h2>
-          <p className={styles.cardSub}>Ranked by posts + comments in the last 3 months</p>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Username</th>
-                <th>Posts</th>
-                <th>Comments</th>
-                <th>Activity Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.mostActive?.length === 0 && (
-                <tr><td colSpan={5} className={styles.empty}>No data</td></tr>
-              )}
-              {stats.mostActive?.map((u, i) => (
-                <tr key={u.id}
-                  className={styles.clickRow}
-                  onClick={() => router.push(`/profile/${u.id}`)}>
-                  <td>{i + 1}</td>
-                  <td>@{u.username}</td>
-                  <td>{Number(u.post_count)}</td>
-                  <td>{Number(u.comment_count)}</td>
-                  <td>
-                    <span className={styles.badge}>{Number(u.activity_score)}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        {/* ── STAT 4: Posts Per Month ── */}
-        <section className={styles.card}>
-          <h2 className={styles.cardTitle}>4. Posts Per Month</h2>
+          <h2 className={styles.cardTitle}>3. Posts Per Month</h2>
           <p className={styles.cardSub}>Post volume over the last 12 months</p>
           {stats.postsPerMonth?.length === 0 ? (
             <p className={styles.empty}>No data available</p>
@@ -164,61 +125,6 @@ export default function StatsPage() {
           )}
         </section>
 
-        {/* ── STAT 5: Top Words in Posts ── */}
-        <section className={styles.card}>
-          <h2 className={styles.cardTitle}>5. Top Words Used in Posts</h2>
-          <p className={styles.cardSub}>Most frequent meaningful words across all post content</p>
-          <div className={styles.wordCloud}>
-            {stats.topWords?.length === 0 && <p className={styles.empty}>No data</p>}
-            {stats.topWords?.map((w) => {
-              const size = 0.8 + (w.count / maxWordCount) * 1.4;
-              return (
-                <span key={w.word} className={styles.word}
-                  style={{ fontSize: `${size}rem`, opacity: 0.6 + (w.count / maxWordCount) * 0.4 }}>
-                  {w.word}
-                  <sup style={{ fontSize: "0.6rem", marginLeft: "2px", color: "#0d8ddb" }}>{w.count}</sup>
-                </span>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ── STAT 6: Influence Leaderboard ── */}
-        <section className={styles.card}>
-          <h2 className={styles.cardTitle}>6. Influence Leaderboard</h2>
-          <p className={styles.cardSub}>Users ranked by followers-to-following ratio</p>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Username</th>
-                <th>Followers</th>
-                <th>Following</th>
-                <th>Influence Ratio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.leaderboard?.length === 0 && (
-                <tr><td colSpan={5} className={styles.empty}>No data</td></tr>
-              )}
-              {stats.leaderboard?.map((u, i) => (
-                <tr key={u.id}
-                  className={styles.clickRow}
-                  onClick={() => router.push(`/profile/${u.id}`)}>
-                  <td>{i + 1}</td>
-                  <td>@{u.username}</td>
-                  <td>{Number(u.followers)}</td>
-                  <td>{Number(u.following)}</td>
-                  <td>
-                    <span className={styles.badge} style={{ background: "#0d8ddb" }}>
-                      {Number(u.influence_ratio).toFixed(2)}×
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
 
       </main>
 
