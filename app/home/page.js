@@ -30,10 +30,6 @@ export default function HomePage() {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
 
-  useEffect(() => {
-    document.body.className = "home-page";
-    return () => { document.body.className = ""; };
-  }, []);
 
   const fetchMe = useCallback(async () => {
     const res = await fetch("/api/auth/me");
@@ -143,7 +139,7 @@ export default function HomePage() {
   const isLiked = (post) => post.likes.some((l) => l.userID === me?.id);
 
   return (
-    <>
+    <div className="home-page">
       {/* Header */}
       <header className="home-header">
         <div id="pic-header" onClick={() => router.push(`/profile/${me?.id}`)}>
@@ -400,6 +396,6 @@ export default function HomePage() {
           </div>
         </nav>
       </footer>
-    </>
+    </div>
   );
 }

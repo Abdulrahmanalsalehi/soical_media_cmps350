@@ -1,12 +1,14 @@
-// app/api/posts/[id]/comments/route.js
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { addComment } from "@/lib/repository";
 
+
+
 export async function POST(req, { params }) {
   try {
+    const { id } = await params;
     // check authentication
-    const userId = Number(cookies().get("userId")?.value);
+    const userId = Number((await cookies()).get("userId")?.value);
     if (!userId) {
       return NextResponse.json(
         { error: { message: "Unauthorized", status: 401 } },
@@ -14,7 +16,7 @@ export async function POST(req, { params }) {
       );
     }
 
-    // validate content
+    // check content is not empty
     const { content } = await req.json();
     if (!content?.trim()) {
       return NextResponse.json(
@@ -23,10 +25,10 @@ export async function POST(req, { params }) {
       );
     }
 
-    // create comment
+    // create a comment
     const { data, error } = await addComment(
       userId,
-      Number(params.id),
+      Number(id),
       content.trim()
     );
 

@@ -1,4 +1,3 @@
-// app/api/users/search/route.js
 import { NextResponse } from "next/server";
 import { searchUsers } from "@/lib/repository";
 

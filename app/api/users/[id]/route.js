@@ -6,8 +6,9 @@ import { getUserProfile, updateUserProfile } from "@/lib/repository";
 // fetch a user profile
 export async function GET(req, { params }) {
   try {
+    const { id } = await params;
     // get user profile by id
-    const { data, error } = await getUserProfile(Number(params.id));
+    const { data, error } = await getUserProfile(Number(id));
 
     // handle repository error
     if (error) {
@@ -36,11 +37,12 @@ export async function GET(req, { params }) {
 //  update a user profile
 export async function PATCH(req, { params }) {
   try {
+    const { id } = await params;
     // get logged in user id from cookies
-    const userId = Number(cookies().get("userId")?.value);
+    const userId = Number((await cookies()).get("userId")?.value);
 
     // only allow updating your own profile
-    if (userId !== Number(params.id)) {
+    if (userId !== Number(id)) {
       return NextResponse.json(
         { error: { message: "Forbidden", status: 403 } },
         { status: 403 }

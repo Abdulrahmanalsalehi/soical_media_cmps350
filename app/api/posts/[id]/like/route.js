@@ -1,12 +1,12 @@
-// app/api/posts/[id]/like/route.js
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { toggleLike } from "@/lib/repository";
 
 export async function POST(req, { params }) {
   try {
+    const { id } = await params;
     // get the logged in user ID from cookies
-    const userId = Number(cookies().get("userId")?.value);
+    const userId = Number((await cookies()).get("userId")?.value);
     if (!userId) {
       return NextResponse.json(
         { error: { message: "Unauthorized", status: 401 } },
@@ -14,8 +14,8 @@ export async function POST(req, { params }) {
       );
     }
 
-    // toggle like 
-    const { data, error } = await toggleLike(userId, Number(params.id));
+    // toggle like
+    const { data, error } = await toggleLike(userId, Number(id));
 
     if (error) {
       return NextResponse.json(error, { status: error.status });

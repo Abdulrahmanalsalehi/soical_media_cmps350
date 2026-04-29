@@ -1,4 +1,3 @@
-// app/api/auth/route.js
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -16,7 +15,7 @@ export async function POST(req) {
     }
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid credentials" },
+        { error: "invalid user" },
         { status: 401 }
       );
     }
@@ -25,13 +24,13 @@ export async function POST(req) {
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return NextResponse.json(
-        { error: "Invalid credentials" },
+        { error: "invalid password" },
         { status: 401 }
       );
     }
 
     // set cookie
-    cookies().set("userId", String(user.id), {
+    (await cookies()).set("userId", String(user.id), {
       httpOnly: true,
       path: "/",
     });

@@ -7,7 +7,6 @@
   gap: 2rem;
 }
 
-/* ── Card ── */
 .card {
   background: #1e1e1e;
   border-radius: 12px;
@@ -27,7 +26,6 @@
   margin-bottom: 1.2rem;
 }
 
-/* ── Stat 1: Overview Grid ── */
 .overviewGrid {
   display: flex;
   flex-wrap: wrap;
@@ -56,7 +54,6 @@
   margin-top: 0.3rem;
 }
 
-/* ── Stat 2: Averages ── */
 .averagesRow {
   display: flex;
   gap: 1.5rem;
@@ -71,7 +68,7 @@
   text-align: center;
 }
 
-/* ── Tables (stats 3 & 6) ── */
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -114,7 +111,7 @@
   font-weight: bold;
 }
 
-/* ── Stat 4: Bar Chart ── */
+
 .barChart {
   display: flex;
   align-items: flex-end;
@@ -160,8 +157,6 @@
   margin-top: 4px;
   white-space: nowrap;
 }
-
-/* ── Stat 5: Word Cloud ── */
 .wordCloud {
   display: flex;
   flex-wrap: wrap;
@@ -178,7 +173,6 @@
   cursor: default;
 }
 
-/* ── Misc ── */
 .empty {
   color: #666;
   font-style: italic;

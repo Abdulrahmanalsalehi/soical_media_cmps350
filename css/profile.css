@@ -233,10 +233,9 @@ body {
 }
 .like,
 .comment {
-  background: none;      
-  border: none;                
-  cursor: pointer;   
-  filter: invert(1); 
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 .like:hover img,
 .comment:hover img,
@@ -254,6 +253,7 @@ body {
   font-weight: bold;
   font-size: 1rem;
   vertical-align: super;
+  color: #fff;
 }
 #like-count, #comment-count{
   vertical-align: super;
@@ -307,7 +307,7 @@ body {
   margin-bottom: 0.5rem;
 }
 .comment-box {
-  background-color: #373636;
+  background-color: #4a4848;
   padding: 12px;
   margin-top: 10px;
   border-radius: 8px;

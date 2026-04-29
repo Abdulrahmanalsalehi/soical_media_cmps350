@@ -1,13 +1,14 @@
-// app/api/auth/register/route.js
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { createUser, getUserByEmail, getUserByUsername } from "@/lib/repository";
+
+
 
 export async function POST(req) {
   try {
     const { fullname, username, email, phone, dob, gender, password } = await req.json();
 
-    // basic validation
+    // basic validation, make sure nothing is missing
     if (!fullname || !username || !email || !password) {
       return NextResponse.json(
         { error: { message: "Missing required fields", status: 400 } },
@@ -15,7 +16,7 @@ export async function POST(req) {
       );
     }
 
-    // check email uniqueness
+    // check if email is unique
     const { data: existingEmail } = await getUserByEmail(email);
     if (existingEmail) {
       return NextResponse.json(
@@ -24,7 +25,7 @@ export async function POST(req) {
       );
     }
 
-    // check username uniqueness
+    // check if username is unique
     const { data: existingUsername } = await getUserByUsername(username);
     if (existingUsername) {
       return NextResponse.json(

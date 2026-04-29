@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+// end session
 export async function POST() {
-  cookies().delete("userId");
+  (await cookies()).delete("userId");
   return NextResponse.json({ success: true });
 }

@@ -2,14 +2,17 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAllPosts, createPost } from "@/lib/repository";
 
+
+// get all posts from all users 
 export async function GET() {
-  const userId = Number(cookies().get("userId")?.value) || null;
+  const userId = Number((await cookies()).get("userId")?.value) || null;
   const posts = await getAllPosts(userId);
   return NextResponse.json(posts);
 }
 
+// create a post
 export async function POST(req) {
-  const userId = Number(cookies().get("userId")?.value);
+  const userId = Number((await cookies()).get("userId")?.value);
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { content } = await req.json();

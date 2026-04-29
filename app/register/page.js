@@ -54,7 +54,7 @@ export default function RegisterPage() {
       if (res.ok) {
         router.push("/login");
       } else {
-        setError(json.error?.message || json.message || (typeof json.error === "string" ? json.error : null) || "Registration failed");
+        setError("Registration failed");
       }
     } catch {
       setError("Something went wrong. Please try again.");

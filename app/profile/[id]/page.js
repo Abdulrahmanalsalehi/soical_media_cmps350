@@ -29,10 +29,6 @@ export default function ProfilePage({ params }) {
   const [showEdit, setShowEdit] = useState(false);
   const [editForm, setEditForm] = useState({ fullname: "", username: "", email: "", phone: "", bio: "" });
 
-  useEffect(() => {
-    document.body.className = "profile-page";
-    return () => { document.body.className = ""; };
-  }, []);
 
   const fetchMe = useCallback(async () => {
     const res = await fetch("/api/auth/me");
@@ -159,7 +155,7 @@ export default function ProfilePage({ params }) {
   const isLiked = (post) => post.likes.some((l) => l.userID === me?.id);
 
   return (
-    <>
+    <div className="profile-page">
       <header className="profile">
         <div className="profile-header">
           <div id="pic-header" onClick={() => router.push(`/profile/${me?.id}`)}>
@@ -356,6 +352,6 @@ export default function ProfilePage({ params }) {
           </div>
         </nav>
       </footer>
-    </>
+    </div>
   );
 }

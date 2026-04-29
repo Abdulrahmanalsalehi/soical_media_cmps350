@@ -1,7 +1,10 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
+const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 
 
 
@@ -105,11 +108,12 @@ async function main(){
     await prisma.user.deleteMany();
 
     // create users using data from usersData array
+    const hashedPassword = await bcrypt.hash("Password123&", 10);
     const users = await Promise.all(
         usersData.map((u) => prisma.user.create({
             data: {
                 ...u,
-                password: "Password123&", // default for all users
+                password: hashedPassword,
             }
         }))
     )

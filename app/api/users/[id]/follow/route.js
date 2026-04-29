@@ -1,4 +1,3 @@
-// app/api/users/[id]/follow/route.js
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { toggleFollow, isFollowing } from "@/lib/repository";
@@ -6,8 +5,9 @@ import { toggleFollow, isFollowing } from "@/lib/repository";
 // follow or unfollow a user
 export async function POST(req, { params }) {
   try {
+    const { id } = await params;
     // get logged in user ID from cookies
-    const followerId = Number(cookies().get("userId")?.value);
+    const followerId = Number((await cookies()).get("userId")?.value);
     if (!followerId) {
       return NextResponse.json(
         { error: { message: "Unauthorized", status: 401 } },
@@ -15,7 +15,7 @@ export async function POST(req, { params }) {
       );
     }
     // cannot follow yourself
-    const followingId = Number(params.id);
+    const followingId = Number(id);
     if (followerId === followingId) {
       return NextResponse.json(
         { error: { message: "Cannot follow yourself", status: 400 } },
@@ -42,10 +42,11 @@ export async function POST(req, { params }) {
 // check if one user follows another
 export async function GET(req, { params }) {
   try {
+    const { id } = await params;
     // read followerId from query string
     const { searchParams } = new URL(req.url);
     const followerId = Number(searchParams.get("followerId"));
-    const followingId = Number(params.id);
+    const followingId = Number(id);
 
     if (!followerId) {
       return NextResponse.json({ data: { isFollowing: false } });

@@ -29,7 +29,7 @@ export default function LoginPage() {
       if (res.ok) {
         router.push("/home");
       } else {
-        setError(json.error?.message || json.error || "Invalid credentials");
+        setError("Login failed");
       }
     } catch {
       setError("Something went wrong. Please try again.");
