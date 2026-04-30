@@ -243,7 +243,7 @@ export default function ProfilePage({ params }) {
             <p style={{ color: "#bbb", textAlign: "center" }}>No posts yet.</p>
           )}
           {posts.map((post) => (
-            <div key={post.id} className="post">
+            <div key={post.id} className="post" onClick={() => { setSelectedPost(post); setCommentInput(""); }}>
               <div className="post-header">
                 <img className="default-pic-post" src="/media/profile-picture.png" alt="avatar" />
                 <div>
@@ -256,25 +256,23 @@ export default function ProfilePage({ params }) {
                     src="/media/trash-2 (2).svg"
                     alt="delete"
                     width="20"
-                    onClick={() => handleDelete(post.id)}
+                    onClick={(e) => { e.stopPropagation(); handleDelete(post.id); }}
                   />
                 )}
               </div>
-              <div className="post-content" onClick={() => { setSelectedPost(post); setCommentInput(""); }}>
+              <div className="post-content">
                 {post.content}
               </div>
               <div className="post-actions">
                 <button
                   className={`like${isLiked(post) ? " liked" : ""}`}
-                  onClick={() => handleLike(post.id)}
+                  onClick={(e) => { e.stopPropagation(); handleLike(post.id); }}
                 >
-                  <img src="/media/heart.svg" alt="like"
-                    style={{ filter: isLiked(post) ? "invert(30%) sepia(90%) saturate(400%) hue-rotate(-20deg) brightness(1.2)" : "invert(1)" }}
-                  />
+                  <img src="/media/heart.svg" alt="like" style={{ filter: "invert(1)" }} />
                   <span className="like-count">{post.likes.length}</span>
                 </button>
-                <button className="comment" onClick={() => { setSelectedPost(post); setCommentInput(""); }}>
-                  <img src="/media/message-circle.svg" alt="comment" />
+                <button className="comment" onClick={(e) => e.stopPropagation()}>
+                  <img src="/media/message-circle.svg" alt="comment" style={{ filter: "invert(1)" }} />
                   <span className="comment-count">{post.comments.length}</span>
                 </button>
               </div>
@@ -313,13 +311,11 @@ export default function ProfilePage({ params }) {
                     className={`like${isLiked(selectedPost) ? " liked" : ""}`}
                     onClick={() => handleLike(selectedPost.id)}
                   >
-                    <img src="/media/heart.svg" alt="like"
-                      style={{ filter: isLiked(selectedPost) ? "invert(30%) sepia(90%) saturate(400%) hue-rotate(-20deg) brightness(1.2)" : "invert(1)" }}
-                    />
+                    <img src="/media/heart.svg" alt="like" style={{ filter: "invert(1)" }} />
                     <span id="like-count">{selectedPost.likes.length}</span>
                   </button>
                   <button id="detail-comment" className="comment">
-                    <img src="/media/message-circle.svg" alt="comment" />
+                    <img src="/media/message-circle.svg" alt="comment" style={{ filter: "invert(1)" }} />
                     <span id="comment-count">{selectedPost.comments.length}</span>
                   </button>
                 </div>

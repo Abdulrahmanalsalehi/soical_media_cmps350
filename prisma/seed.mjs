@@ -9,7 +9,7 @@ const prisma = new PrismaClient({ adapter });
 
 
 // data is all AI generated
-const usersData = [ 
+const usersData = [
   { fullname: "Alice Johnson",   username: "alice_j",   email: "alice@example.com",   phone: "+1-555-0101", gender: "Female", dob: new Date("1998-03-12"), bio: "Photography enthusiast & coffee lover " },
   { fullname: "Bob Martinez",    username: "bob_m",     email: "bob@example.com",     phone: "+1-555-0102", gender: "Male",   dob: new Date("1995-07-24"), bio: "Software dev by day, gamer by night " },
   { fullname: "Clara Smith",     username: "clara_s",   email: "clara@example.com",   phone: "+1-555-0103", gender: "Female", dob: new Date("2000-01-05"), bio: "Bookworm  | Traveler " },
@@ -78,7 +78,7 @@ const commentsData = [
 // function to calculate the date based on how many days ago it was posted
 function daysAgoDate(days) {
     const day = new Date();
-    // set the date = current date - how many days ago 
+    // set the date = current date - how many days ago
     day.setDate(day.getDate() - days);
     return day;
 }
@@ -99,7 +99,7 @@ function randomSubset(arr, min = 1, max = 5) {
 
 // seeding database
 async function main(){
-    
+
     // delete eveything before seeding
     await prisma.like.deleteMany();
     await prisma.comment.deleteMany();
@@ -168,13 +168,13 @@ async function main(){
             }
         }
     }
-        
+
     let commentCount = 0;
     for(const post of posts){
         // get a random number of users to comment (between 1 and 5)
         const commenters = randomSubset(users, 1, 5);
         for(const commenter of commenters){
-            // create comment 
+            // create comment
             await prisma.comment.create({
                 data: {
                     content: randomItem(commentsData),
@@ -192,6 +192,6 @@ async function main(){
 main().catch((e) => {
     console.error(e);
     process.exit(1);
-}).finally(async () => {    
+}).finally(async () => {
     await prisma.$disconnect();
 });

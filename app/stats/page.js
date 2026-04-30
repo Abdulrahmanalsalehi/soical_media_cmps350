@@ -43,18 +43,17 @@ export default function StatsPage() {
     <>
       {/* Reuse home header */}
       <header className="home-header">
-        <div id="pic-header" style={{ cursor: "pointer" }} onClick={() => router.push(`/profile/${me?.id}`)}>
+        <div id="pic-header" style={{ cursor: "pointer", top: "10px" }} onClick={() => router.push(`/profile/${me?.id}`)}>
           <img id="profile-pic" src="/media/profile-picture.png" alt="profile" />
           <span id="username-header">{me?.username}</span>
         </div>
-        <h1 style={{ color: "#fff", fontSize: "1.1rem", fontWeight: "bold" }}>Platform Statistics</h1>
       </header>
 
       <main className={styles.main}>
 
         {/* ── STAT 1: Platform Overview ── */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>1. Platform Overview</h2>
+          <h2 className={styles.cardTitle}>Platform Overview</h2>
           <p className={styles.cardSub}>Total counts across the entire platform</p>
           <div className={styles.overviewGrid}>
             <div className={styles.overviewItem}>
@@ -82,7 +81,7 @@ export default function StatsPage() {
 
         {/* Avg Followers */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>2. Avg. Followers per User</h2>
+          <h2 className={styles.cardTitle}>Avg Followers per User</h2>
           <p className={styles.cardSub}>Average number of followers across all users</p>
           <div className={styles.averageBox}>
             <span className={styles.bigNumber}>{stats.avgFollowers}</span>
@@ -92,7 +91,7 @@ export default function StatsPage() {
 
         {/* Avg Posts */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>3. Avg. Posts per User</h2>
+          <h2 className={styles.cardTitle}> Avg Posts per User</h2>
           <p className={styles.cardSub}>Average number of posts across all users</p>
           <div className={styles.averageBox}>
             <span className={styles.bigNumber}>{stats.avgPosts}</span>
@@ -102,8 +101,8 @@ export default function StatsPage() {
 
         {/* Posts Per Month */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>4. Posts Per Month</h2>
-          <p className={styles.cardSub}>Post volume over the last 12 months</p>
+          <h2 className={styles.cardTitle}>Posts Per Month</h2>
+          <p className={styles.cardSub}>Post volume over the last 6 months</p>
           {stats.postsPerMonth?.length === 0 ? (
             <p className={styles.empty}>No data available</p>
           ) : (
@@ -120,7 +119,7 @@ export default function StatsPage() {
 
         {/* Top Liked Posts */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>5. Top Liked Posts</h2>
+          <h2 className={styles.cardTitle}>Top Liked Posts</h2>
           <p className={styles.cardSub}>The 3 most liked posts on the platform</p>
           {stats.topPosts?.length === 0 ? (
             <p className={styles.empty}>No posts yet</p>
