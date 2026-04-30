@@ -3,6 +3,7 @@ import { use, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import "@/css/profile.css";
 
+// helper function to show how much time passed since the post was created
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   const now = new Date();
@@ -10,14 +11,24 @@ function formatDate(dateStr) {
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
+   if (mins < 1) {
+    return "just now";
+  }
+  if (mins < 60) {
+    return `${mins}m ago`;
+  }
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+  if (days < 7){
+    return `${days}d ago`;
+  }
   return date.toLocaleDateString();
 }
 
+
 export default function ProfilePage({ params }) {
+  // state variables
   const { id } = use(params);
   const router = useRouter();
   const [me, setMe] = useState(null);
@@ -29,20 +40,22 @@ export default function ProfilePage({ params }) {
   const [showEdit, setShowEdit] = useState(false);
   const [editForm, setEditForm] = useState({ fullname: "", username: "", email: "", phone: "", bio: "" });
 
-
+  // fetch current user 
   const fetchMe = useCallback(async () => {
     const res = await fetch("/api/auth/me");
     const json = await res.json();
     if (!json.data) { router.replace("/login"); return; }
     setMe(json.data);
   }, [router]);
-
+  
+  // fetch current user profile 
   const fetchProfile = useCallback(async () => {
     const res = await fetch(`/api/users/${id}`);
     const json = await res.json();
     if (json.data) setProfile(json.data);
   }, [id]);
-
+  
+  // get user posts
   const fetchPosts = useCallback(async () => {
     const res = await fetch(`/api/users/${id}/posts`);
     const json = await res.json();
@@ -270,7 +283,7 @@ export default function ProfilePage({ params }) {
         </div>
       </section>
 
-      {/* Post detail modal */}
+      {/* Post details window */}
       <section>
         <div id="post-window" style={{ display: selectedPost ? "flex" : "none" }}>
           <div id="post-window-content">

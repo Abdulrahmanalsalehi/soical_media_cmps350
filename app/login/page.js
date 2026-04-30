@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "@/css/auth.css";
 
+
 export default function LoginPage() {
+  // state variables 
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

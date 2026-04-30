@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "@/css/home.css";
-import styles from "./stats.css";
+import styles from "./stats.module.css";
 
 export default function StatsPage() {
   const router = useRouter();
@@ -38,10 +38,6 @@ export default function StatsPage() {
       </div>
     );
   }
-
-  const maxPostCount = stats.postsPerMonth?.length
-    ? Math.max(...stats.postsPerMonth.map((m) => Number(m.post_count)))
-    : 1;
 
   return (
     <>
@@ -84,47 +80,75 @@ export default function StatsPage() {
           </div>
         </section>
 
-        {/* ── STAT 2: Averages ── */}
+        {/* Avg Followers */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>2. Platform Averages</h2>
-          <p className={styles.cardSub}>Computed via SQL aggregation queries</p>
-          <div className={styles.averagesRow}>
-            <div className={styles.averageBox}>
-              <span className={styles.bigNumber}>{stats.avgFollowers}</span>
-              <span className={styles.label}>Avg. Followers per User</span>
-            </div>
-            <div className={styles.averageBox}>
-              <span className={styles.bigNumber}>{stats.avgPosts}</span>
-              <span className={styles.label}>Avg. Posts per User</span>
-            </div>
+          <h2 className={styles.cardTitle}>2. Avg. Followers per User</h2>
+          <p className={styles.cardSub}>Average number of followers across all users</p>
+          <div className={styles.averageBox}>
+            <span className={styles.bigNumber}>{stats.avgFollowers}</span>
+            <span className={styles.label}>Avg. Followers</span>
           </div>
         </section>
 
-        {/* ── STAT 3: Posts Per Month ── */}
+        {/* Avg Posts */}
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>3. Posts Per Month</h2>
+          <h2 className={styles.cardTitle}>3. Avg. Posts per User</h2>
+          <p className={styles.cardSub}>Average number of posts across all users</p>
+          <div className={styles.averageBox}>
+            <span className={styles.bigNumber}>{stats.avgPosts}</span>
+            <span className={styles.label}>Avg. Posts</span>
+          </div>
+        </section>
+
+        {/* Posts Per Month */}
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>4. Posts Per Month</h2>
           <p className={styles.cardSub}>Post volume over the last 12 months</p>
           {stats.postsPerMonth?.length === 0 ? (
             <p className={styles.empty}>No data available</p>
           ) : (
-            <div className={styles.barChart}>
-              {stats.postsPerMonth?.map((row) => {
-                const count = Number(row.post_count);
-                const pct = maxPostCount > 0 ? (count / maxPostCount) * 100 : 0;
-                return (
-                  <div key={row.month} className={styles.barGroup}>
-                    <div className={styles.barWrap}>
-                      <span className={styles.barValue}>{count}</span>
-                      <div className={styles.bar} style={{ height: `${Math.max(pct, 4)}%` }} />
-                    </div>
-                    <span className={styles.barLabel}>{row.month?.slice(5)}</span>
-                  </div>
-                );
-              })}
+            <div className={styles.monthList}>
+              {stats.postsPerMonth?.map((row) => (
+                <div key={row.month} className={styles.monthRow}>
+                  <span className={styles.monthName}>{row.month}</span>
+                  <span className={styles.badge}>{Number(row.post_count)}</span>
+                </div>
+              ))}
             </div>
           )}
         </section>
 
+        {/* Top Liked Posts */}
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>5. Top Liked Posts</h2>
+          <p className={styles.cardSub}>The 3 most liked posts on the platform</p>
+          {stats.topPosts?.length === 0 ? (
+            <p className={styles.empty}>No posts yet</p>
+          ) : (
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Author</th>
+                  <th>Likes</th>
+                  <th>Preview</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.topPosts?.slice(0, 3).map((post, i) => (
+                  <tr key={post.id} className={styles.clickRow}>
+                    <td>{i + 1}</td>
+                    <td>{post.author?.username ?? "—"}</td>
+                    <td><span className={styles.badge}>{post.likes?.length ?? 0}</span></td>
+                    <td style={{ maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {post.content}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </section>
 
       </main>
 

@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import "@/css/home.css";
 
+// helper function to return the date of the post based on how mush time left since 
+// the post was created 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   const now = new Date();
@@ -10,14 +11,24 @@ function formatDate(dateStr) {
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
+  if (mins < 1) {
+    return "just now";
+  }
+  if (mins < 60) {
+    return `${mins}m ago`;
+  }
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+  if (days < 7){
+    return `${days}d ago`;
+  }
   return date.toLocaleDateString();
+  
 }
 
 export default function HomePage() {
+  // define state variables
   const router = useRouter();
   const [me, setMe] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -30,14 +41,17 @@ export default function HomePage() {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
 
-
+  // fetch current user who is logged in 
   const fetchMe = useCallback(async () => {
     const res = await fetch("/api/auth/me");
     const json = await res.json();
-    if (!json.data) { router.replace("/login"); return; }
+    if (!json.data) {
+       router.replace("/login"); return; 
+      }
     setMe(json.data);
   }, [router]);
-
+  
+  // fetch posts based on the filter 
   const fetchPosts = useCallback(async (mode) => {
     const url = mode === "following" ? "/api/posts/feed" : "/api/posts";
     const res = await fetch(url);
@@ -47,6 +61,7 @@ export default function HomePage() {
 
   useEffect(() => { fetchMe(); }, [fetchMe]);
   useEffect(() => { fetchPosts(feedMode); }, [feedMode, fetchPosts]);
+  
 
   async function handlePost() {
     if (!postInput.trim()) return;
@@ -57,6 +72,7 @@ export default function HomePage() {
     });
     if (res.ok) {
       setPostInput("");
+      setMe((prev) => ({ ...prev, posts: [...(prev.posts ?? []), {}] }));
       fetchPosts(feedMode);
     }
   }
@@ -89,8 +105,11 @@ export default function HomePage() {
   async function handleDelete(postId) {
     const res = await fetch(`/api/posts/${postId}`, { method: "DELETE" });
     if (res.ok) {
-      setPosts((prev) => prev.filter((p) => p.id !== postId));
-      if (selectedPost?.id === postId) setSelectedPost(null);
+      setPosts((prev) => prev.filter((p) => p.id !== postId)); // filter out posts except the one that will be deleted
+      setMe((prev) => ({ ...prev, posts: (prev.posts ?? []).slice(0, -1) }));
+      if (selectedPost?.id === postId) {
+        setSelectedPost(null);
+      }
     }
   }
 
@@ -138,6 +157,7 @@ export default function HomePage() {
 
   const isLiked = (post) => post.likes.some((l) => l.userID === me?.id);
 
+  // html for home page same as the one used in phase 1
   return (
     <div className="home-page">
       {/* Header */}
@@ -167,7 +187,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Logout modal */}
+      {/* Logout window */}
       <div id="logout-window" style={{ display: showLogout ? "flex" : "none" }}>
         <div id="logout-popup">
           <p>Are you sure you want to logout?</p>
@@ -218,18 +238,18 @@ export default function HomePage() {
             </p>
           )}
           {posts.map((post) => (
-            <div key={post.id} className="post">
+            <div key={post.id} className="post" onClick={() => openPost(post)}>
               <div className="post-header">
                 <img
                   className="default-pic-post"
                   src="/media/profile-picture.png"
                   alt="avatar"
-                  onClick={() => router.push(`/profile/${post.author.id}`)}
+                  onClick={(e) => { e.stopPropagation(); router.push(`/profile/${post.author.id}`); }}
                 />
                 <div>
                   <div
                     className="post-username"
-                    onClick={() => router.push(`/profile/${post.author.id}`)}
+                    onClick={(e) => { e.stopPropagation(); router.push(`/profile/${post.author.id}`); }}
                   >
                     {post.author.username}
                   </div>
@@ -241,25 +261,23 @@ export default function HomePage() {
                     src="/media/trash-2 (2).svg"
                     alt="delete"
                     width="20"
-                    onClick={() => handleDelete(post.id)}
+                    onClick={(e) => { e.stopPropagation(); handleDelete(post.id); }}
                   />
                 )}
               </div>
-              <div className="post-content" onClick={() => openPost(post)}>
+              <div className="post-content">
                 {post.content}
               </div>
               <div className="post-actions">
                 <button
                   className={`like${isLiked(post) ? " liked" : ""}`}
-                  onClick={() => handleLike(post.id)}
+                  onClick={(e) => { e.stopPropagation(); handleLike(post.id); }}
                 >
-                  <img src="/media/heart.svg" alt="like"
-                    style={{ filter: isLiked(post) ? "invert(30%) sepia(90%) saturate(400%) hue-rotate(-20deg) brightness(1.2)" : "invert(1)" }}
-                  />
+                  <img src="/media/heart.svg" alt="like" style={{ filter: "invert(1)" }} />
                   <span className="like-count">{post.likes.length}</span>
                 </button>
-                <button className="comment" onClick={() => openPost(post)}>
-                  <img src="/media/message-circle.svg" alt="comment" />
+                <button className="comment" onClick={(e) => e.stopPropagation()}>
+                  <img src="/media/message-circle.svg" alt="comment" style={{ filter: "invert(1)" }} />
                   <span className="comment-count">{post.comments.length}</span>
                 </button>
               </div>
@@ -268,7 +286,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Post detail modal */}
+      {/* Post details window */}
       <section>
         <div id="post-window" style={{ display: selectedPost ? "flex" : "none" }}>
           <div id="post-window-content">
@@ -302,13 +320,11 @@ export default function HomePage() {
                     className={`like${isLiked(selectedPost) ? " liked" : ""}`}
                     onClick={() => handleLike(selectedPost.id)}
                   >
-                    <img src="/media/heart.svg" alt="like"
-                      style={{ filter: isLiked(selectedPost) ? "invert(30%) sepia(90%) saturate(400%) hue-rotate(-20deg) brightness(1.2)" : "invert(1)" }}
-                    />
+                    <img src="/media/heart.svg" alt="like" style={{ filter: "invert(1)" }} />
                     <span id="like-count">{selectedPost.likes.length}</span>
                   </button>
                   <button id="detail-comment" className="comment">
-                    <img src="/media/message-circle.svg" alt="comment" />
+                    <img src="/media/message-circle.svg" alt="comment" style={{ filter: "invert(1)" }} />
                     <span id="comment-count">{selectedPost.comments.length}</span>
                   </button>
                 </div>
@@ -341,7 +357,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Search overlay */}
+      {/* Search pop up window */}
       {showSearch && (
         <div style={{
           position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)",

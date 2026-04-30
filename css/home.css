@@ -13,6 +13,7 @@ body {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  padding-top: 100px;
 }
 
 /****************** top header styling ******************/
@@ -140,7 +141,6 @@ body {
   padding: 15px;
   border-radius: 8px;
   background-color: #373636;
-  margin-top: 8rem;
   margin-bottom: 2rem;
 }
 #create-post textarea {
@@ -285,6 +285,7 @@ body {
   vertical-align: super;
   font-weight: bold;
   font-size: 1rem;
+  color: #fff;
 }
 #post-window{
   display: none;
