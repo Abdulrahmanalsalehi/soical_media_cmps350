@@ -8,7 +8,7 @@ const prisma = new PrismaClient({ adapter });
 
 
 
-// data is all AI generated
+// data AI generated
 const usersData = [
   { fullname: "Alice Johnson",   username: "alice_j",   email: "alice@example.com",   phone: "+1-555-0101", gender: "Female", dob: new Date("1998-03-12"), bio: "Photography enthusiast & coffee lover " },
   { fullname: "Bob Martinez",    username: "bob_m",     email: "bob@example.com",     phone: "+1-555-0102", gender: "Male",   dob: new Date("1995-07-24"), bio: "Software dev by day, gamer by night " },
